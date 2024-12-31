@@ -1,0 +1,101 @@
+/* Container for the photo and icons */
+.photo-container {
+    position: relative;
+    width: 300px; /* Adjust for better spacing */
+    height: 300px;
+    margin: 50px auto;
+  }
+  
+  /* Center photo styling */
+  .center-photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 5px solid #6A78FF;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+  }
+  
+  /* Rotating circle */
+  .rotating-circle {
+    position: absolute;
+    width: 250px; /* Circle size */
+    height: 250px;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: rotate 12s linear infinite;
+    z-index: 1;
+  }
+
+  /* Counter-rotation animation for keeping icons upright */
+  .rotating-circle .social-icon {
+    animation: counter-rotate 12s linear infinite;
+  }
+
+
+  
+  /* Social icons */
+  .social-icon {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #6A78FF;
+    color: white;
+    border-radius: 50%;
+    font-size: 20px;
+    text-decoration: none;
+    transform-origin: center center;
+  }
+  
+  /* Positioning icons around the circle */
+  .social-icon:nth-child(1) {
+    top: 5%; /* Adjust for equal spacing */
+    left: 42%;
+    transform: translate(-50%, 0) rotate(0deg);
+  }
+  .social-icon:nth-child(2) {
+    top: 44%;
+    right: 5%; /* Adjust for equal spacing */
+    transform: translate(0, -50%) rotate(0deg);
+  }
+  .social-icon:nth-child(3) {
+    bottom: 5%; /* Adjust for equal spacing */
+    left: 42%;
+    transform: translate(-50%, 0) rotate(0deg);
+  }
+  .social-icon:nth-child(4) {
+    top: 44%;
+    left: 5%; /* Adjust for equal spacing */
+    transform: translate(0, -50%) rotate(0deg);
+  }
+  
+
+  
+  /* Rotation animation for the circle */
+  @keyframes rotate {
+    from {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+  
+  /* Counter-rotation animation for icons */
+  @keyframes counter-rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(-360deg);
+    }
+  }
+  
