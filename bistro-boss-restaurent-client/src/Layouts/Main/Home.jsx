@@ -6,10 +6,14 @@ import PopularMenu from "../../Pages/Home/PopularMenu";
 import FeaturedItems from "../../Pages/Home/FeaturedItems";
 import Reviews from "../../Pages/Home/Reviews";
 import Profile from "../../Pages/Home/Profile";
+import { Helmet } from "react-helmet-async";
 
 const Home = () => {
   return (
     <div>
+                  <Helmet>
+                      <title>Bistro Boss | Home</title>
+                  </Helmet>
       <Banner></Banner>
       <CategorySlider></CategorySlider>
       <Notice></Notice>

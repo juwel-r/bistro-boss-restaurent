@@ -70,3 +70,9 @@ button:focus-visible {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.active{
+  color: #535bf2;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+        
+}

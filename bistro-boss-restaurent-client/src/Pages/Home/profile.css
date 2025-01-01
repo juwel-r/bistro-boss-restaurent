@@ -47,8 +47,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #6A78FF;
-    color: white;
+    /* background-color: #6A78FF; */
+    /* color: white; */
     border-radius: 50%;
     font-size: 20px;
     text-decoration: none;

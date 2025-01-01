@@ -6,7 +6,7 @@ const FeaturedItems = () => {
   return (
     <div
       style={{ backgroundImage: `url(${featuredImg})` }}
-      className="p-10 pt-2 text-white bg-fixed bg-center "
+      className="p-10 pt-2 text-white bg-fixed bg-center mt-8 bg-cover"
     >
       <SectionHeader
         heading={"Featured Items"}

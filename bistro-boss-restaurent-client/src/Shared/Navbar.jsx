@@ -4,14 +4,14 @@ const Navbar = () => {
     const menuList = (
         <>
         <NavLink className="pr-2" to='/'>Home</NavLink>
-        <NavLink className="pr-2" to='/list'>List</NavLink>
-        <NavLink className="pr-2" to='/add'>Add</NavLink>
+        <NavLink className="pr-2" to='/menu'>Our Menu</NavLink>
+        <NavLink className="pr-2" to='/order'>Our Shop</NavLink>
         <NavLink className="pr-2" to='/dish'>Dish</NavLink>
         <NavLink className="pr-2" to='/all-dish'>All Dish</NavLink>
         </>
     )
     return (
-<div className="navbar backdrop-blur-sm fixed z-50 bg-black/30 max-w-screen-xl text-white">
+<div className="navbar backdrop-blur-sm fixed z-50 bg-white/30 max-w-screen-xl text-black ">
   <div className="navbar-start">
     <div className="dropdown">
       <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -30,14 +30,14 @@ const Navbar = () => {
       </div>
       <ul
         tabIndex={0}
-        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+        className="text-lg menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
         {menuList}
       </ul>
     </div>
     <a className="btn btn-ghost text-xl">daisyUI</a>
   </div>
   <div className="navbar-center hidden lg:flex">
-    <ul className="menu menu-horizontal px-1">
+    <ul className="menu menu-horizontal px-1 text-lg">
     {menuList}
     </ul>
   </div>
