@@ -27,7 +27,7 @@ const FeaturedItems = () => {
             Accusantium, ipsa rerum qui facilis eius iste. Itaque voluptates
             dignissimos optio, veniam quas doloribus?
           </p>
-          <button className="btn btn-outline bg-black">Order Now</button>
+          <button className="btn btn-outline bg-black text-white">Order Now</button>
         </div>
       </section>
     </div>

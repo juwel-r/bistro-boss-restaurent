@@ -76,3 +76,7 @@ button:focus-visible {
     text-underline-offset: 0.2em;
         
 }
+
+a{
+  color: #535bf2;
+}

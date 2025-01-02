@@ -11,7 +11,6 @@ const useMenu = () => {
         setLoadingData(false);
       });
   }, []);
-  // console.log(menuItems);
   return [menuItems, loadingData];
 };
 

@@ -23,9 +23,18 @@ async function run() {
   try {
     const menu = client.db("bistro-boss").collection("menu");
     const reviews = client.db("bistro-boss").collection("reviews");
+
+    //=====================API========================\\
     // get menu
     app.get("/menu",async (req, res) => {
       const result =await menu.find().toArray();
+      res.send(result);
+    });
+
+
+    // get reviews
+    app.get("/reviews",async (req, res) => {
+      const result =await reviews.find().toArray();
       res.send(result);
     });
   } finally {
