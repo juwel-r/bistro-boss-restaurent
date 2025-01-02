@@ -6,6 +6,7 @@ import "react-tabs/style/react-tabs.css";
 import FoodCart from "../components/FoodCart";
 import useMenu from "../Hooks/useMenu";
 import { useParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 const Order = () => {
   const [menuItems] = useMenu();
@@ -30,6 +31,9 @@ const Order = () => {
   const [tabIndex, setTabIndex] = useState(initialIndex);
   return (
     <div>
+      <Helmet>
+        <title>Bistro Boss | Shop</title>
+      </Helmet>
       <CommonCover
         img={bgImg}
         title="our shop"

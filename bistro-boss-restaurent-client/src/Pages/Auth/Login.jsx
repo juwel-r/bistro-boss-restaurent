@@ -1,6 +1,6 @@
 import { use, useContext, useRef, useState } from "react";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   LoadCanvasTemplate,
   loadCaptchaEnginge,
@@ -8,17 +8,21 @@ import {
 } from "react-simple-captcha";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { Result } from "postcss";
+import { Helmet } from "react-helmet-async";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const { login } = useContext(AuthContext);
-  const captchaRef = useRef(null);
   const [disabled, setDisabled] = useState(true);
+  const navigate = useNavigate()
+  const location = useLocation()
+  const redirect = (location?.state) || "/"
 
   useEffect(() => {
     loadCaptchaEnginge(6);
   }, []);
-  const handleCaptchaValidate = () => {
-    const value = captchaRef.current.value;
+  const handleCaptchaValidate = (e) => {
+    const value = e.target.value;
     if (validateCaptcha(value) === true) {
       console.log("captcha matched");
       setDisabled(false);
@@ -35,9 +39,50 @@ const Login = () => {
     const email = form.email.value;
     const password = form.password.value;
     console.log({ email, password });
-    login(email, password).then((result) => console.log(result.user));
+    login(email, password).then((result) => {
+      navigate(redirect)
+      Swal.fire({
+        title: `Logged in Successful!`,
+        showClass: {
+          popup: `
+            animate__animated
+            animate__fadeInUp
+            animate__faster
+          `
+        },
+        hideClass: {
+          popup: `
+            animate__animated
+            animate__fadeOutDown
+            animate__faster
+          `
+        }
+      })
+    }).catch(err=>{
+      Swal.fire({
+        title: `${err}`,
+        showClass: {
+          popup: `
+            animate__animated
+            animate__fadeInUp
+            animate__faster
+          `
+        },
+        hideClass: {
+          popup: `
+            animate__animated
+            animate__fadeOutDown
+            animate__faster
+          `
+        }
+      });
+    });
   };
   return (
+    <>
+          <Helmet>
+            <title>Bistro Boss | Login</title>
+          </Helmet>
     <div className="hero-content ">
       <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
         <Link className="text-xl my-4 px-4" to="/">
@@ -81,19 +126,13 @@ const Login = () => {
               <LoadCanvasTemplate />
             </label>
             <input
-              ref={captchaRef}
+              onBlur={handleCaptchaValidate}
               type="text"
               placeholder="Type the captcha"
               className="input input-bordered"
               required
             />
-            <button
-              onClick={handleCaptchaValidate}
-              type="button"
-              className="btn btn-sm w-fit mt-4 btn-success"
-            >
-              Validate Captcha
-            </button>
+
           </div>
           <div className="form-control mt-6">
             <button disabled={disabled} className="btn btn-primary">
@@ -106,6 +145,7 @@ const Login = () => {
         </p>
       </div>
     </div>
+    </>
   );
 };
 
