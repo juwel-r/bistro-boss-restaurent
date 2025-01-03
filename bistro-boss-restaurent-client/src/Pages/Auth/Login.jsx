@@ -16,7 +16,8 @@ const Login = () => {
   const [disabled, setDisabled] = useState(true);
   const navigate = useNavigate()
   const location = useLocation()
-  const redirect = (location?.state) || "/"
+  const redirect = location.state?.from?.pathname || "/"
+  console.log(location.state?.from?.pathname)
 
   useEffect(() => {
     loadCaptchaEnginge(6);
@@ -135,6 +136,7 @@ const Login = () => {
 
           </div>
           <div className="form-control mt-6">
+            {/* TODO: Re- */}
             <button disabled={disabled} className="btn btn-primary">
               Login
             </button>

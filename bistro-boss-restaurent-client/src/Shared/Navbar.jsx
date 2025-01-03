@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../Provider/AuthProvider";
 import Swal from "sweetalert2";
+import { FiShoppingCart } from "react-icons/fi";
 
 const Navbar = () => {
   const { userInfo, logOut } = useContext(AuthContext);
@@ -23,7 +24,7 @@ const Navbar = () => {
         All Dish
       </NavLink>
       <NavLink className="pr-2" to="/private">
-       Private
+        Private
       </NavLink>
     </>
   );
@@ -82,13 +83,23 @@ const Navbar = () => {
         <ul className="menu menu-horizontal px-1 text-lg">{menuList}</ul>
       </div>
       <div className="navbar-end">
+      <p className="p-1 md:p-3 border-2 bg-gray-50 rounded-full relative mr-4">
+            <Link to="/dashboard">
+              <FiShoppingCart />
+            </Link>
+            <span className="absolute -top-2 -right-2  rounded-full h-5 w-5 text-center flex justify-center items-center font-bold text-sm border ">
+              0
+            </span>
+          </p>
         {userInfo ? (
-<div className="flex  items-center gap-2">
-  <p className="border rounded-md px-2 py-1">{userInfo.displayName}</p>
-<button onClick={handleLogOut} className="btn btn-outline btn-sm">
-            Logout
-          </button>
-</div>
+          <div className="flex  items-center gap-2">
+            {/* <p className="border rounded-md px-2 py-1">
+              {userInfo.displayName}
+            </p> */}
+            <button onClick={handleLogOut} className="btn btn-outline btn-sm">
+              Logout
+            </button>
+          </div>
         ) : (
           <Link to="/login">
             <button className="btn text-lg btn-outline btn-sm">Login</button>

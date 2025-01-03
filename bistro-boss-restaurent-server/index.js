@@ -23,18 +23,24 @@ async function run() {
   try {
     const menu = client.db("bistro-boss").collection("menu");
     const reviews = client.db("bistro-boss").collection("reviews");
+    const carts = client.db("bistro-boss").collection("carts");
 
     //=====================API========================\\
     // get menu
-    app.get("/menu",async (req, res) => {
-      const result =await menu.find().toArray();
+    app.get("/menu", async (req, res) => {
+      const result = await menu.find().toArray();
       res.send(result);
     });
 
-
     // get reviews
-    app.get("/reviews",async (req, res) => {
-      const result =await reviews.find().toArray();
+    app.get("/reviews", async (req, res) => {
+      const result = await reviews.find().toArray();
+      res.send(result);
+    });
+
+    //==============Add to cart================\\
+    app.post("/carts", async (req, res) => {
+      const result = await carts.insertOne(req.body);
       res.send(result);
     });
   } finally {
@@ -49,3 +55,4 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+// nodemon index.js
