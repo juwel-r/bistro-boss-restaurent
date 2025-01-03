@@ -3,6 +3,7 @@ import useAuth from "../Hooks/useAuth";
 import Swal from "sweetalert2";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
+import useCart from "../Hooks/useCart";
 
 const FoodCart = ({ item }) => {
   const { userInfo } = useAuth();
@@ -10,16 +11,39 @@ const FoodCart = ({ item }) => {
   const location = useLocation();
   const { _id, name, recipe, price, image } = item;
   const axiosSecure = useAxiosSecure();
-  const cartItem = {
-    menuId : _id,
-    customer : userInfo?.email
-  }
+  const [, refetch]= useCart()
 
+  // Add to cart handler
   const handleAddToCart = (product) => {
     if (userInfo?.email) {
-      axiosSecure.post('/carts', cartItem).then(res=>{
-        console.log(res.data)
-      })
+      const cartItem = {
+        productId: product._id,
+        productName: product.name,
+        productPrice: product.price,
+        productImage: product.image,
+        customerEmail: userInfo?.email,
+      };
+
+      axiosSecure.post("/carts", cartItem).then((res) => {
+        Swal.fire({
+          title: `${product.name} has successfully added to cart`,
+          showClass: {
+            popup: `
+              animate__animated
+              animate__fadeInUp
+              animate__faster
+            `,
+          },
+          hideClass: {
+            popup: `
+              animate__animated
+              animate__fadeOutDown
+              animate__faster
+            `,
+          },
+        });
+        refetch() //refetch the cart on useCart Hook to change count on navbar
+      });
       // TODO: if  user logged in then allow to add cart
     } else {
       Swal.fire({

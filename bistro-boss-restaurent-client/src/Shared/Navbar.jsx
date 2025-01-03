@@ -3,27 +3,30 @@ import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../Provider/AuthProvider";
 import Swal from "sweetalert2";
 import { FiShoppingCart } from "react-icons/fi";
+import useCart from "../Hooks/useCart";
 
 const Navbar = () => {
   const { userInfo, logOut } = useContext(AuthContext);
+  const [cart]= useCart()
+  console.log("cart",cart)
   const menuList = (
     <>
-      <NavLink className="pr-2" to="/">
+      <NavLink className="px-2" to="/">
         Home
       </NavLink>
-      <NavLink className="pr-2" to="/menu">
+      <NavLink className="px-2" to="/menu">
         Our Menu
       </NavLink>
-      <NavLink className="pr-2" to="/order/salad">
+      <NavLink className="px-2" to="/order/salad">
         Our Shop
       </NavLink>
-      <NavLink className="pr-2" to="/login">
+      <NavLink className="px-2" to="/login">
         Login
       </NavLink>
-      <NavLink className="pr-2" to="/all-dish">
+      <NavLink className="px-2" to="/all-dish">
         All Dish
       </NavLink>
-      <NavLink className="pr-2" to="/private">
+      <NavLink className="px-2" to="/private">
         Private
       </NavLink>
     </>
@@ -72,7 +75,7 @@ const Navbar = () => {
           </div>
           <ul
             tabIndex={0}
-            className="text-lg menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+            className="menu menu-sm dropdown-content bg-base-100 rounded-sm z-[1] mt-3 w-52 p-2 shadow"
           >
             {menuList}
           </ul>
@@ -80,15 +83,15 @@ const Navbar = () => {
         <a className="btn btn-ghost text-xl">daisyUI</a>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1 text-lg">{menuList}</ul>
+        <ul className="menu menu-horizontal px-1 text-base">{menuList}</ul>
       </div>
       <div className="navbar-end">
-      <p className="p-1 md:p-3 border-2 bg-gray-50 rounded-full relative mr-4">
-            <Link to="/dashboard">
+      <p className=" md:p-3 border-2 bg-pink-600 rounded-full relative mr-4 text-lg">
+            <Link to="/dashboard/cart" className="text-white">
               <FiShoppingCart />
             </Link>
-            <span className="absolute -top-2 -right-2  rounded-full h-5 w-5 text-center flex justify-center items-center font-bold text-sm border ">
-              0
+            <span className="text-pink-600 text-sm font-bold text-center absolute -top-2 -right-1 bg-white rounded-full h-6 w-6  flex justify-center items-center border border-pink-600">
+              {cart.length}
             </span>
           </p>
         {userInfo ? (
