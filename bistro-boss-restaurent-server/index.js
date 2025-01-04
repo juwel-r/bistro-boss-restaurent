@@ -3,6 +3,7 @@ const cors = require("cors");
 const app = express();
 require("dotenv").config();
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+const e = require("express");
 const port = process.env.PORT || 5000;
 
 // Middleware
@@ -24,8 +25,11 @@ async function run() {
     const menu = client.db("bistro-boss").collection("menu");
     const reviews = client.db("bistro-boss").collection("reviews");
     const carts = client.db("bistro-boss").collection("carts");
+    const users = client.db("bistro-boss").collection("users");
 
     //=====================API========================\\
+
+    //=============Menu section============\\
     // get menu
     app.get("/menu", async (req, res) => {
       const result = await menu.find().toArray();
@@ -38,7 +42,44 @@ async function run() {
       res.send(result);
     });
 
-    //==============Add to cart section================\\
+    //============User Data section=========\\
+    app.post("/user", async (req, res) => {
+      const user = req.body;
+      const email = req.query?.email;
+      const query = { email: email };
+      const isExisting = await users.findOne(query);
+      if (isExisting) {
+        return res.send({ message: "old user logged in", insertedId: null });
+      }
+      const result = await users.insertOne(user);
+      res.send(result);
+    });
+
+    app.get("/user", async (req, res) => {
+      const result = await users.find().toArray();
+      res.send(result);
+    });
+
+    //make admin
+    app.patch("/user/:id", async (req, res) => {
+      const filter = { _id: new ObjectId(req.params.id) };
+      const updateDoc = {
+        $set: {
+          roll: "admin",
+        },
+      };
+      const result = await users.updateOne(filter, updateDoc);
+      res.send(result);
+    });
+
+    //delete user
+    app.delete("/user/:id", async (req, res) => {
+      const query = { _id: new ObjectId(req.params.id) };
+      const result = await users.deleteOne(query);
+      res.send(result);
+    });
+
+    //============Add to cart section==========\\
     app.post("/carts", async (req, res) => {
       const result = await carts.insertOne(req.body);
       res.send(result);
@@ -69,4 +110,7 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+
+//last module watched 68-6 >> 5 minute
 // nodemon index.js

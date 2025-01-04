@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Provider/AuthProvider";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
 
 const Register = () => {
   const {
@@ -18,6 +19,8 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
+  const axiosPublic = useAxiosPublic();
+
   const onSubmit = (data) => {
     // console.log(data);
     createUser(data.email, data.password)
@@ -25,26 +28,32 @@ const Register = () => {
         console.log(result.user);
         updateUserProfile({ displayName: data.name, photoURL: data.photoURL })
           .then(() => {
-            logOut();
-            Swal.fire({
-              title: `New Account Created Successfully!`,
-              showClass: {
-                popup: `
-                    animate__animated
-                    animate__fadeInUp
-                    animate__faster
-                  `,
-              },
-              hideClass: {
-                popup: `
-                    animate__animated
-                    animate__fadeOutDown
-                    animate__faster
-                  `,
-              },
-            });
+            axiosPublic
+              .post("/user", { name: data.name, email: data.email })
+              .then((result) => {
+                if (result.data.insertedId) {
+                  logOut();
+                  Swal.fire({
+                    title: `New Account Created Successfully!`,
+                    showClass: {
+                      popup: `
+                        animate__animated
+                        animate__fadeInUp
+                        animate__faster
+                      `,
+                    },
+                    hideClass: {
+                      popup: `
+                        animate__animated
+                        animate__fadeOutDown
+                        animate__faster
+                      `,
+                    },
+                  });
 
-            navigate("/login");
+                  navigate("/login");
+                }
+              });
           })
           .catch((err) => {
             Swal.fire({

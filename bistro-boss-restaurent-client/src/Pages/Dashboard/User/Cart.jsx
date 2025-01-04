@@ -1,12 +1,13 @@
 import React from "react";
-import useCart from "../../Hooks/useCart";
+import useCart from "../../../Hooks/useCart";
 import { MdDelete } from "react-icons/md";
-import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../../Hooks/useAxiosPublic";
+import SectionHeader from "../../../components/SectionHeader";
 
 const Cart = () => {
   const [cart, refetch] = useCart();
-  const axiosSecure = useAxiosSecure();
+  const axiosPublic = useAxiosPublic();
 
   const totalPrice = cart.reduce((a, c) => {
     return a + c.productPrice;
@@ -21,13 +22,13 @@ const Cart = () => {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
-      width:"300px"
+      width: "400px",
     })
       .then((result) => {
         if (result.isConfirmed) {
-          axiosSecure.delete(`/carts/${id}`).then((res) => {
+          axiosPublic.delete(`/carts/${id}`).then((res) => {
             if (res.data.deletedCount > 0) {
-                console.log(res)
+              console.log(res);
               refetch();
               Swal.fire({
                 title: "Deleted!",
@@ -41,13 +42,17 @@ const Cart = () => {
       .catch((err) => console.log(err));
   };
   return (
-    <div className="w-10/12 mx-auto min-h-96 bg-white ">
-      <div className="flex justify-between items-start px-8 mt-8 pt-8">
+    <div className="w-10/12 mx-auto min-h-96  ">
+      <SectionHeader
+        heading={"wanna add more"}
+        subHeading={"My Cart"}
+      ></SectionHeader>
+      <div className="flex justify-between items-start px-8 mt-8 pt-8 bg-white">
         <h1 className="text-3xl font-bold">Total Orders: {cart.length}</h1>
         <h1 className="text-3xl font-bold">Total Price: {totalPrice}</h1>
         <button className="bg-yellow-600 rounded-md p-2 ">Pay</button>
       </div>
-      <div className="overflow-x-auto px-4 mt-6">
+      <div className="overflow-x-auto px-4 pt-6 bg-white">
         <table className="table">
           {/* head */}
           <thead className="bg-yellow-600">

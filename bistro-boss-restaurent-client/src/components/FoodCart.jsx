@@ -2,16 +2,16 @@ import React from "react";
 import useAuth from "../Hooks/useAuth";
 import Swal from "sweetalert2";
 import { useLocation, useNavigate } from "react-router-dom";
-import useAxiosSecure from "../Hooks/useAxiosSecure";
 import useCart from "../Hooks/useCart";
+import useAxiosPublic from "../Hooks/useAxiosPublic";
 
 const FoodCart = ({ item }) => {
   const { userInfo } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const { _id, name, recipe, price, image } = item;
-  const axiosSecure = useAxiosSecure();
-  const [, refetch]= useCart()
+  const axiosPublic = useAxiosPublic();
+  const [, refetch] = useCart();
 
   // Add to cart handler
   const handleAddToCart = (product) => {
@@ -24,7 +24,7 @@ const FoodCart = ({ item }) => {
         customerEmail: userInfo?.email,
       };
 
-      axiosSecure.post("/carts", cartItem).then((res) => {
+      axiosPublic.post("/carts", cartItem).then((res) => {
         Swal.fire({
           title: `${product.name} has successfully added to cart`,
           showClass: {
@@ -42,7 +42,7 @@ const FoodCart = ({ item }) => {
             `,
           },
         });
-        refetch() //refetch the cart on useCart Hook to change count on navbar
+        refetch(); //refetch the cart on useCart Hook to change count on navbar
       });
       // TODO: if  user logged in then allow to add cart
     } else {

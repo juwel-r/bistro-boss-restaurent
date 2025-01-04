@@ -10,6 +10,7 @@ import { AuthContext } from "../../Provider/AuthProvider";
 import { Result } from "postcss";
 import { Helmet } from "react-helmet-async";
 import Swal from "sweetalert2";
+import GoogleLogin from "../../Shared/GoogleLogin";
 
 const Login = () => {
   const { login } = useContext(AuthContext);
@@ -17,7 +18,7 @@ const Login = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const redirect = location.state?.from?.pathname || "/"
-  console.log(location.state?.from?.pathname)
+
 
   useEffect(() => {
     loadCaptchaEnginge(6);
@@ -137,7 +138,7 @@ const Login = () => {
           </div>
           <div className="form-control mt-6">
             {/* TODO: Re- */}
-            <button disabled={disabled} className="btn btn-primary">
+            <button className="btn btn-primary">
               Login
             </button>
           </div>
@@ -145,6 +146,8 @@ const Login = () => {
         <p className="px-6 pb-8">
           Don't have an Account! <Link to="/register">Register</Link> now.
         </p>
+        <div className="divider">Or</div>
+        <GoogleLogin></GoogleLogin>
       </div>
     </div>
     </>

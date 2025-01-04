@@ -7,8 +7,8 @@ import useCart from "../Hooks/useCart";
 
 const Navbar = () => {
   const { userInfo, logOut } = useContext(AuthContext);
-  const [cart]= useCart()
-  console.log("cart",cart)
+  const [cart] = useCart();
+  console.log("cart", cart);
   const menuList = (
     <>
       <NavLink className="px-2" to="/">
@@ -86,14 +86,14 @@ const Navbar = () => {
         <ul className="menu menu-horizontal px-1 text-base">{menuList}</ul>
       </div>
       <div className="navbar-end">
-      <p className=" md:p-3 border-2 bg-pink-600 rounded-full relative mr-4 text-lg">
-            <Link to="/dashboard/cart" className="text-white">
-              <FiShoppingCart />
-            </Link>
+        <Link to="/dashboard/cart" className="text-white">
+          <p className=" md:p-3 border-2 bg-pink-600 rounded-full relative mr-4 text-lg">
+            <FiShoppingCart />
             <span className="text-pink-600 text-sm font-bold text-center absolute -top-2 -right-1 bg-white rounded-full h-6 w-6  flex justify-center items-center border border-pink-600">
               {cart.length}
             </span>
           </p>
+        </Link>
         {userInfo ? (
           <div className="flex  items-center gap-2">
             {/* <p className="border rounded-md px-2 py-1">
