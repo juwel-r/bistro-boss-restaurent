@@ -8,7 +8,7 @@ import useCart from "../Hooks/useCart";
 const Navbar = () => {
   const { userInfo, logOut } = useContext(AuthContext);
   const [cart] = useCart();
-  console.log("cart", cart);
+  // console.log("cart", cart);
   const menuList = (
     <>
       <NavLink className="px-2" to="/">
