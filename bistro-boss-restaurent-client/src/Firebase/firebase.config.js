@@ -18,3 +18,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 export default auth;
+
+
+
+/**
+   VITE_apiKey=AIzaSyCF2fdwytASUGQ3gZ56PP6oT3w-AQzgw6U
+  VITE_authDomain=bistro-boss-a880b.firebaseapp.com
+  VITE_projectId=bistro-boss-a880b
+  VITE_storageBucket=bistro-boss-a880b.firebasestorage.app
+  VITE_messagingSenderId=1094253085573
+  VITE_appId=1:1094253085573:web:e32d51e1b6cf46e8867ae
+ */
