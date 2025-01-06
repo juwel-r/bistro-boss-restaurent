@@ -29,7 +29,7 @@ console.log(isPending)
   if (userInfo && isAdmin) {
     return children;
   }
-  return <Navigate state={{ from: location }} to="/login"></Navigate>;
+  return <Navigate to="/"></Navigate>;
 };
 
 export default AdminRoute;
