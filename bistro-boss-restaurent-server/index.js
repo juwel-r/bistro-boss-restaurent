@@ -1,3 +1,6 @@
+//last module watched 68-6 >> 5 minute
+// nodemon index.js
+
 const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
@@ -26,6 +29,33 @@ async function run() {
     const reviews = client.db("bistro-boss").collection("reviews");
     const carts = client.db("bistro-boss").collection("carts");
     const users = client.db("bistro-boss").collection("users");
+
+    //jwt token verify
+    const verifyToken = (req, res, next) => {
+      const token = req.headers.authorization.split(" ")[1]; //to split Bearer from token which was sent from frontend
+      if (!token) {
+        return res.status(401).send({ message: "Access Forbidden" });
+      }
+      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decode) => {
+        if (err) {
+          return res.status(401).send({ message: "Access Forbidden" });
+        }
+        req.decode = decode;
+        next();
+      });
+    };
+
+    //isAdmin verify
+    const verifyAdmin = async (req, res, next) => {
+      const email = req.decode.email;
+      const query = { email: email };
+      const user = await users.findOne(query);
+      const isAdmin = user?.roll === "admin";
+      if (!isAdmin) {
+        return res.status(403).send({ message: "Unauthorize Access" });
+      }
+      next();
+    };
 
     //==========JWT==========\\
     app.post("/jwt", (req, res) => {
@@ -64,13 +94,13 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/user", async (req, res) => {
+    app.get("/user", verifyToken, verifyAdmin, async (req, res) => {
       const result = await users.find().toArray();
       res.send(result);
     });
 
     //make admin
-    app.patch("/user/:id", async (req, res) => {
+    app.patch("/user/:id", verifyToken, verifyAdmin, async (req, res) => {
       const filter = { _id: new ObjectId(req.params.id) };
       const updateDoc = {
         $set: {
@@ -81,8 +111,22 @@ async function run() {
       res.send(result);
     });
 
+    //isAdmin check
+    app.get("/user/admin/:email", verifyToken, async (req, res) => {
+      const email = req.params.email;
+      if (!req.decode.email === email) {
+        return res.status(403).send({ message: "Unauthorize Access" });
+      }
+      const query = { email: email };
+      const user = await users.findOne(query);
+      if (user?.roll === "admin") {
+        res.send({ admin: true });
+      }
+      console.log(req.decode.email);
+    });
+
     //delete user
-    app.delete("/user/:id", async (req, res) => {
+    app.delete("/user/:id", verifyToken, verifyAdmin, async (req, res) => {
       const query = { _id: new ObjectId(req.params.id) };
       const result = await users.deleteOne(query);
       res.send(result);
@@ -119,6 +163,3 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
-//last module watched 68-6 >> 5 minute
-// nodemon index.js

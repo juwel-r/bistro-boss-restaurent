@@ -12,7 +12,11 @@ const AllUsers = () => {
   const { data: users = [], refetch } = useQuery({
     queryKey: ["allUsers"],
     queryFn: async () => {
-      const res = await axiosSecure.get("/user");
+      const res = await axiosSecure.get("/user", {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("access-token")}`,
+        },
+      });
       return res.data;
     },
   });
@@ -27,10 +31,11 @@ const AllUsers = () => {
       cancelButtonColor: "#d33",
       confirmButtonText: "Make Admin!",
       width: "400px",
-    })
-      .then((result) => {
-        if (result.isConfirmed) {
-          axiosSecure.patch(`/user/${user._id}`).then((res) => {
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure
+          .patch(`/user/${user._id}`)
+          .then((res) => {
             console.log(res.data);
             if (res.data.modifiedCount > 0) {
               refetch();
@@ -39,10 +44,18 @@ const AllUsers = () => {
                 icon: "success",
               });
             }
+          })
+          .catch((err) => {
+            // console.log(err);
+            Swal.fire({
+              title: `${err.response.data.message+" "+ err.response.status}`,
+              text: `${err}`,
+              icon: "error",
+              width:"400px"
+            });
           });
-        }
-      })
-      .catch((err) => console.log(err));
+      }
+    });
   };
 
   const handleDelete = (user) => {
@@ -67,10 +80,17 @@ const AllUsers = () => {
                 icon: "success",
               });
             }
+          })      .catch((err) => {
+            console.log(err);
+            Swal.fire({
+              title: `${err.response.data.message+" "+ err.response.status}`,
+              text: `${err}`,
+              icon: "error",
+            });
           });
         }
       })
-      .catch((err) => console.log(err));
+
   };
 
   return (
