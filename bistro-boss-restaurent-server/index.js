@@ -76,6 +76,12 @@ async function run() {
       res.send(result);
     });
 
+    app.post("/menu", verifyToken, verifyAdmin, async (req, res) => {
+      const menuData = req.body;
+      const result = await menu.insertOne(menuData);
+      res.send(result);
+    });
+
     // get reviews
     app.get("/reviews", async (req, res) => {
       const result = await reviews.find().toArray();
