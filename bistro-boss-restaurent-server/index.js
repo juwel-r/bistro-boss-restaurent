@@ -33,6 +33,7 @@ async function run() {
     //jwt token verify
     const verifyToken = (req, res, next) => {
       const token = req.headers.authorization.split(" ")[1]; //to split Bearer from token which was sent from frontend
+
       if (!token) {
         return res.status(401).send({ message: "Access Forbidden" });
       }
@@ -163,3 +164,14 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+
+
+
+/**
+USER_ID=juwelr6
+PASSWORD=Vc91InJqJOqmWWvv
+ACCESS_TOKEN_SECRET=b86a75c940e8b367fd7c610cb3348ac56a0a3c25f6d80fea3bed898468f5d1c8b09d08038b9fe40587a39688c13a59200f979676760927a91b5b2401aa015842
+
+
+ */
