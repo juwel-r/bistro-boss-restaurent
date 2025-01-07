@@ -33,14 +33,9 @@ async function run() {
     //jwt token verify
     const verifyToken = (req, res, next) => {
       const token = req.headers.authorization.split(" ")[1]; //to split Bearer from token which was sent from frontend
-
-      if (!token) {
-        return res.status(401).send({ message: "Access Forbidden" });
-      }
+      if (!token) return res.status(401).send({ message: "Access Forbidden" });
       jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decode) => {
-        if (err) {
-          return res.status(401).send({ message: "Access Forbidden" });
-        }
+        if (err) return res.status(401).send({ message: "Access Forbidden" });
         req.decode = decode;
         next();
       });
@@ -52,9 +47,8 @@ async function run() {
       const query = { email: email };
       const user = await users.findOne(query);
       const isAdmin = user?.roll === "admin";
-      if (!isAdmin) {
+      if (!isAdmin)
         return res.status(403).send({ message: "Unauthorize Access" });
-      }
       next();
     };
 
@@ -68,12 +62,19 @@ async function run() {
     });
 
     //=====================API========================\\
-
     //=============Menu section============\\
     // get menu
     app.get("/menu", async (req, res) => {
       const result = await menu.find().toArray();
       res.send(result);
+    });
+
+    app.get("/menu/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: id }; //no ObjectId on mongodb DB
+      const result = await menu.findOne(query);
+      res.send(result);
+      console.log(id);
     });
 
     app.post("/menu", verifyToken, verifyAdmin, async (req, res) => {
@@ -82,13 +83,28 @@ async function run() {
       res.send(result);
     });
 
-    // get reviews
-    app.get("/reviews", async (req, res) => {
-      const result = await reviews.find().toArray();
+    app.patch("/menu/:id", verifyToken, verifyAdmin, async (req, res) => {
+      const item = req.body;
+      const filter = { _id: req.params.id }; //no ObjectId on mongodb DB
+      const updatedDoc = {
+        $set: {
+          name: item.name,
+          category: item.category,
+          recipe: item.recipe,
+          image: item.image,
+          price: item.price,
+        },
+      };
+      const result = await menu.updateOne(filter, updatedDoc);
       res.send(result);
     });
 
-    //============User Data section=========\\
+    app.delete("/menu/:id", verifyToken, verifyAdmin, async (req, res) => {
+      const result = await menu.deleteOne({ _id: req.params.id });
+      res.send(result);
+    });
+
+    //====================User Data section===============\\
     app.post("/user", async (req, res) => {
       const user = req.body;
       const email = req.query?.email;
@@ -129,7 +145,6 @@ async function run() {
       if (user?.roll === "admin") {
         res.send({ admin: true });
       }
-      console.log(req.decode.email);
     });
 
     //delete user
@@ -156,6 +171,12 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await carts.deleteOne(query);
+      res.send(result);
+    });
+
+    //================ get reviews===================>>
+    app.get("/reviews", async (req, res) => {
+      const result = await reviews.find().toArray();
       res.send(result);
     });
   } finally {
