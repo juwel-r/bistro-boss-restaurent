@@ -14,7 +14,7 @@ import { FaQuoteLeft } from "react-icons/fa";
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:5000/reviews")
+    fetch("https://bistro-boss-restaurent-server-six.vercel.app/reviews")
       .then((res) => res.json())
       .then((data) => setReviews(data));
   }, []);
@@ -24,11 +24,7 @@ const Reviews = () => {
         heading={"Testimonials"}
         subHeading={"Our Clients Reviews"}
       ></SectionHeader>
-      <Swiper
-        navigation={true}
-        modules={[Navigation]}
-        className="mySwiper"
-      >
+      <Swiper navigation={true} modules={[Navigation]} className="mySwiper">
         {reviews.map((review) => (
           <SwiperSlide>
             <div className="flex flex-col items-center justify-center mx-20 text-center space-y-4">
@@ -37,7 +33,7 @@ const Reviews = () => {
                 value={review.rating}
                 readOnly
               />
-              <FaQuoteLeft  className="text-7xl"/>
+              <FaQuoteLeft className="text-7xl" />
               <p className="w-8/12">{review.details}</p>
               <h1 className="text-2xl">{review.name}</h1>
             </div>

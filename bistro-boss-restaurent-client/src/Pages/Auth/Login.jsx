@@ -136,7 +136,7 @@ const Login = () => {
                 type="text"
                 placeholder="Type the captcha"
                 className="input input-bordered"
-                required
+                // required
               />
             </div>
             <div className="form-control mt-6">

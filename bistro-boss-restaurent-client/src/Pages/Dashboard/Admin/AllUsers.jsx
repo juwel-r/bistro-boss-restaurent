@@ -105,7 +105,7 @@ const AllUsers = () => {
           <table className="table ">
             {/* head */}
             <thead>
-              <tr>
+              <tr className="bg-yellow-600">
                 <th>#</th>
                 <th>Name</th>
                 <th>Email</th>
