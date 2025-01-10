@@ -14,6 +14,7 @@ import AdminRoute from "./AdminRoute";
 import AddItem from "../Pages/Dashboard/Admin/AddItem";
 import ManageItems from "../Pages/Dashboard/Admin/ManageItems";
 import EditItem from "../Pages/Dashboard/Admin/EditItem";
+import Payment from "../Pages/Dashboard/User/Payment";
 
 const router = createBrowserRouter([
   {
@@ -63,6 +64,10 @@ const router = createBrowserRouter([
         element: <Cart></Cart>,
       },
       {
+        path: "/dashboard/payment",
+        element: <Payment></Payment>,
+      },
+      {
         path: "all-users",
         element: (
           <AllUsers></AllUsers>
@@ -94,9 +99,7 @@ const router = createBrowserRouter([
           </AdminRoute>
         ),
         loader: ({ params }) =>
-          fetch(
-            `https://bistro-boss-restaurent-server-six.vercel.app/menu/${params.id}`
-          ),
+          fetch(`http://localhost:5000/menu/${params.id}`),
       },
     ],
   },

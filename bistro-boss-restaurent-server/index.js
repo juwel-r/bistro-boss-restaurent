@@ -1,11 +1,11 @@
 //last module watched 68-6 >> 5 minute
 // nodemon index.js
-
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const app = express();
-require("dotenv").config();
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const port = process.env.PORT || 5000;
 
@@ -28,6 +28,7 @@ async function run() {
     const menu = client.db("bistro-boss").collection("menu");
     const reviews = client.db("bistro-boss").collection("reviews");
     const carts = client.db("bistro-boss").collection("carts");
+    const payment = client.db("bistro-boss").collection("payment");
     const users = client.db("bistro-boss").collection("users");
 
     //jwt token verify
@@ -174,10 +175,41 @@ async function run() {
       res.send(result);
     });
 
+    //================ Payment Api===================>>
+    app.post("/payment", async (req, res) => {
+      const payment = res.body;
+      const paymentResult = await payment.insertOne(payment);
+
+      //delete cart from cart listen
+      const query = {
+        _id: {
+          $in: payment.cartIds.map((id) => new ObjectId(id)),
+        },
+      };
+      const deleteResult = await carts.deleteMany(query);
+      res.send({ paymentResult, deleteResult });
+    });
+
     //================ get reviews===================>>
     app.get("/reviews", async (req, res) => {
       const result = await reviews.find().toArray();
       res.send(result);
+    });
+
+    //==============Stripe=================>>
+    app.post("/create-payment-intent", async (req, res) => {
+      const { price } = req.body;
+      if (price) {
+        const amount = parseInt(price * 100);
+        const paymentIntent = await stripe.paymentIntents.create({
+          amount: amount,
+          currency: "usd",
+          payment_method_types: ["card"],
+        });
+        res.send({
+          clientSecret: paymentIntent.client_secret,
+        });
+      }
     });
   } finally {
   }

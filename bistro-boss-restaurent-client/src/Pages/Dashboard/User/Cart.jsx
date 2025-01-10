@@ -4,6 +4,7 @@ import { MdDelete } from "react-icons/md";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../../../Hooks/useAxiosPublic";
 import SectionHeader from "../../../components/SectionHeader";
+import { Link } from "react-router-dom";
 
 const Cart = () => {
   const [cart, refetch] = useCart();
@@ -50,7 +51,15 @@ const Cart = () => {
       <div className="flex justify-between items-start px-8 mt-8 pt-8 bg-white">
         <h1 className="text-3xl font-bold">Total Orders: {cart.length}</h1>
         <h1 className="text-3xl font-bold">Total Price: {totalPrice}</h1>
-        <button className="bg-yellow-600 rounded-md p-2 ">Pay</button>
+        {cart.length ? (
+          <Link to="/dashboard/payment">
+            <button className="bg-yellow-600 rounded-md p-2 ">Pay</button>
+          </Link>
+        ) : (
+          <button disabled className="bg-gray-400 text-gray-600 rounded-md p-2 ">
+            Pay
+          </button>
+        )}
       </div>
       <div className="overflow-x-auto px-4 pt-6 bg-white">
         <table className="table">
