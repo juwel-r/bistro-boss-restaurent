@@ -63,7 +63,7 @@ const Dashboard = () => {
           ) : (
             <>
               <NavLink
-                to="/"
+                to="/dashboard/user-home"
                 className="flex items-center gap-2 px-2"
               >
                 <FaHome></FaHome> User Home
@@ -90,10 +90,10 @@ const Dashboard = () => {
                 <FaStar></FaStar> Add Review
               </NavLink>
               <NavLink
-                to="/dashboard/booking"
+                to="/dashboard/payment-history"
                 className="flex items-center gap-2 px-2"
               >
-                <FaList></FaList> My Booking
+                <FaList></FaList> My Payment History
               </NavLink>
             </>
           )}

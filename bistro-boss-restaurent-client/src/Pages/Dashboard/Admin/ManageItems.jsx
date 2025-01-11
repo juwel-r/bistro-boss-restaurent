@@ -10,7 +10,7 @@ import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 const ManageItems = () => {
   const [menuItems, loadingData, refetch] = useMenu();
   const axiosSecure = useAxiosSecure();
-  //need to ask that, if any element no imported but use in component, there now showing any error or error sign like red underline in vs code
+  //need to ask that, if any element not imported but use in component, there now showing any error or error sign like red underline in vs code
 
   const handleDelete = (item) => {
     Swal.fire({

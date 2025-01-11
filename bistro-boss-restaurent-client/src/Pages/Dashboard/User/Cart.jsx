@@ -43,12 +43,13 @@ const Cart = () => {
       .catch((err) => console.log(err));
   };
   return (
-    <div className="w-10/12 mx-auto min-h-96  ">
+    <div className="w-10/12 mx-auto min-h-screen  ">
       <SectionHeader
         heading={"wanna add more"}
         subHeading={"My Cart"}
       ></SectionHeader>
-      <div className="flex justify-between items-start px-8 mt-8 pt-8 bg-white">
+      {
+        cart.length>0?<>      <div className="flex justify-between items-start px-8 mt-8 pt-8 bg-white">
         <h1 className="text-3xl font-bold">Total Orders: {cart.length}</h1>
         <h1 className="text-3xl font-bold">Total Price: {totalPrice}</h1>
         {cart.length ? (
@@ -61,7 +62,7 @@ const Cart = () => {
           </button>
         )}
       </div>
-      <div className="overflow-x-auto px-4 pt-6 bg-white">
+      <div className="overflow-x-auto px-4 pt-6 bg-white pb-8 ">
         <table className="table">
           {/* head */}
           <thead className="bg-yellow-600">
@@ -81,7 +82,8 @@ const Cart = () => {
                   <div className="avatar">
                     <div className="mask mask-squircle h-12 w-12">
                       <img
-                        src={item.image}
+                        src={item.
+                          productImage}
                         alt="Avatar Tailwind CSS Component"
                       />
                     </div>
@@ -103,6 +105,9 @@ const Cart = () => {
           </tbody>
         </table>
       </div>
+        </>:<p className="text-4xl text-gray-300 font-bold text-center">No Items In cart</p>
+      }
+
     </div>
   );
 };

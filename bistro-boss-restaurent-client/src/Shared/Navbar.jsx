@@ -4,11 +4,12 @@ import { AuthContext } from "../Provider/AuthProvider";
 import Swal from "sweetalert2";
 import { FiShoppingCart } from "react-icons/fi";
 import useCart from "../Hooks/useCart";
+import useIsAdmin from "../Hooks/useIsAdmin";
 
 const Navbar = () => {
   const { userInfo, logOut } = useContext(AuthContext);
   const [cart] = useCart();
-  // console.log("cart", cart);
+  const [isAdmin] = useIsAdmin();
   const menuList = (
     <>
       <NavLink className="px-2" to="/">
@@ -20,15 +21,16 @@ const Navbar = () => {
       <NavLink className="px-2" to="/order/salad">
         Our Shop
       </NavLink>
-      <NavLink className="px-2" to="/login">
-        Login
-      </NavLink>
-      <NavLink className="px-2" to="/all-dish">
-        All Dish
-      </NavLink>
-      <NavLink className="px-2" to="/private">
-        Private
-      </NavLink>
+      {userInfo && isAdmin && (
+        <Link className="px-2" to="/dashboard/admin-home">
+          Dashboard
+        </Link>
+      )}
+      {userInfo && !isAdmin && (
+        <Link className="px-2" to="/dashboard/user-home">
+          Dashboard
+        </Link>
+      )}
     </>
   );
   const handleLogOut = () => {
@@ -44,7 +46,7 @@ const Navbar = () => {
       if (result.isConfirmed) {
         logOut().then(() => {
           Swal.fire({
-            title: "Deleted!",
+            title: "Logged Out!",
             text: "You have logged out!.",
             icon: "success",
           });

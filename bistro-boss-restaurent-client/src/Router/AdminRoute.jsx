@@ -7,7 +7,7 @@ import { Navigate } from "react-router-dom";
 const AdminRoute = ({children}) => {
   const { userInfo, loading } = useAuth();
   const [isAdmin, isPending] = useIsAdmin();
-console.log(isPending)
+console.log(isAdmin)
   if (loading || isPending )
     return (
       <div className="flex justify-center mt-8">

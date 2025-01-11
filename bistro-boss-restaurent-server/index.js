@@ -34,6 +34,7 @@ async function run() {
     //jwt token verify
     const verifyToken = (req, res, next) => {
       const token = req.headers.authorization.split(" ")[1]; //to split Bearer from token which was sent from frontend
+      console.log("token=>", token);
       if (!token) return res.status(401).send({ message: "Access Forbidden" });
       jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decode) => {
         if (err) return res.status(401).send({ message: "Access Forbidden" });
@@ -177,17 +178,26 @@ async function run() {
 
     //================ Payment Api===================>>
     app.post("/payment", async (req, res) => {
-      const payment = res.body;
-      const paymentResult = await payment.insertOne(payment);
+      const paymentInfo = req.body;
+      const paymentResult = await payment.insertOne(paymentInfo);
 
-      //delete cart from cart listen
+      // delete cart from cart listen
       const query = {
         _id: {
-          $in: payment.cartIds.map((id) => new ObjectId(id)),
+          $in: paymentInfo.cartIds.map((id) => new ObjectId(id)),
         },
       };
       const deleteResult = await carts.deleteMany(query);
       res.send({ paymentResult, deleteResult });
+    });
+
+    app.get("/payment/:email", verifyToken, async (req, res) => {
+      const email = req.params.email;
+      if (req.decode.email !== email)
+        return res.status(401).send({ message: "Forbidden Access" });
+      const query = { email: email };
+      const result = await payment.find(query).toArray();
+      res.send(result);
     });
 
     //================ get reviews===================>>

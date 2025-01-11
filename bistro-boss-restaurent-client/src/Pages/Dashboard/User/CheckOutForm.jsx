@@ -1,9 +1,10 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import React, { useEffect, useState } from "react";
-import { Form } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
 import useCart from "../../../Hooks/useCart";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import useAuth from "../../../Hooks/useAuth";
+import Swal from "sweetalert2";
 
 const CheckOutForm = () => {
   const [clientSecret, setClientSecret] = useState("");
@@ -13,19 +14,23 @@ const CheckOutForm = () => {
   const elements = useElements();
   const axiosSecure = useAxiosSecure();
   const { userInfo } = useAuth();
-  const [cart] = useCart();
+  const [cart, refetch] = useCart();
   const totalPrice = cart.reduce((a, c) => a + c.productPrice, 0);
+  const navigate = useNavigate()
 
   useEffect(() => {
-    axiosSecure
-      .post("/create-payment-intent", { price: totalPrice })
-      .then((res) => {
-        setClientSecret(res.data.clientSecret);
-      });
+    if (totalPrice > 0) {
+      axiosSecure
+        .post("/create-payment-intent", { price: totalPrice })
+        .then((res) => {
+          setClientSecret(res.data.clientSecret);
+        });
+    }
   }, [axiosSecure, totalPrice]);
   // console.log(clientSecret);
 
   const handleSubmit = async (e) => {
+    setTransaction("");
     e.preventDefault();
     if (!stripe || !elements) return;
 
@@ -62,16 +67,26 @@ const CheckOutForm = () => {
       console.log("paymentIntent", paymentIntent);
       if (paymentIntent.status === "succeeded") {
         setTransaction(paymentIntent.id);
-        const payment = {
+        const paymentInfo = {
           email: userInfo.email,
           amount: totalPrice,
           transactionId: paymentIntent.id,
-          cartIds: cart.map((item) => cart._id),
-          productIds: cart.map((item) => cart.productId),
+          cartIds: cart.map((item) => item._id),
+          productIds: cart.map((item) => item.productId),
+          date:new Date(),
           status: "pending",
         };
-        axiosSecure.post("/payment", payment).then((res) => {
+        axiosSecure.post("/payment", paymentInfo).then((res) => {
           console.log(res.data);
+          refetch()
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: `Payment successful $${totalPrice}`,
+            showConfirmButton: false,
+            timer: 1500
+          });
+          navigate("/dashboard/payment-history")
         });
       }
     }
@@ -79,6 +94,7 @@ const CheckOutForm = () => {
 
   return (
     <>
+    <p className="text-xl ml-7">Total Items:{cart.length}</p>
       <form onSubmit={handleSubmit} className="flex gap-4">
         <CardElement
           className="border grow p-4 mx-4 bg-white"
@@ -100,14 +116,14 @@ const CheckOutForm = () => {
         <button
           type="submit"
           className="btn btn-primary"
-          disabled={!stripe || !clientSecret}
+          disabled={!stripe || !clientSecret ||totalPrice<1}
         >
           Pay
         </button>
       </form>
       {transaction && (
         <p className="text-green-600">
-          Your Payment succefull, Transaction Id is{" "}
+          Your Payment successful, Transaction Id is{" "}
           <strong>{transaction}</strong>
         </p>
       )}
