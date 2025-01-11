@@ -16,7 +16,7 @@ const CheckOutForm = () => {
   const { userInfo } = useAuth();
   const [cart, refetch] = useCart();
   const totalPrice = cart.reduce((a, c) => a + c.productPrice, 0);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (totalPrice > 0) {
@@ -73,20 +73,20 @@ const CheckOutForm = () => {
           transactionId: paymentIntent.id,
           cartIds: cart.map((item) => item._id),
           productIds: cart.map((item) => item.productId),
-          date:new Date(),
+          date: new Date(),
           status: "pending",
         };
         axiosSecure.post("/payment", paymentInfo).then((res) => {
-          console.log(res.data);
-          refetch()
+          // console.log(res.data);
+          refetch();
           Swal.fire({
             position: "top-end",
             icon: "success",
             title: `Payment successful $${totalPrice}`,
             showConfirmButton: false,
-            timer: 1500
+            timer: 1500,
           });
-          navigate("/dashboard/payment-history")
+          navigate("/dashboard/payment-history");
         });
       }
     }
@@ -94,7 +94,7 @@ const CheckOutForm = () => {
 
   return (
     <>
-    <p className="text-xl ml-7">Total Items:{cart.length}</p>
+      <p className="text-xl ml-7">Total Items:{cart.length}</p>
       <form onSubmit={handleSubmit} className="flex gap-4">
         <CardElement
           className="border grow p-4 mx-4 bg-white"
@@ -116,7 +116,7 @@ const CheckOutForm = () => {
         <button
           type="submit"
           className="btn btn-primary"
-          disabled={!stripe || !clientSecret ||totalPrice<1}
+          disabled={!stripe || !clientSecret || totalPrice < 1}
         >
           Pay
         </button>

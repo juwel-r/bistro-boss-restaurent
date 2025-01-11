@@ -3,14 +3,13 @@ import useAuth from "./useAuth";
 import { useNavigate } from "react-router-dom";
 
 const axiosSecure = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://bistro-boss-restaurent-server-six.vercel.app/",
 });
 
 const useAxiosSecure = () => {
   const navigate = useNavigate();
   const { logOut } = useAuth();
 
-  
   // Add a request interceptor
   axiosSecure.interceptors.request.use(
     //backend a request send ar somoy headers soho dite hobe and headers a modde jwt token add kore dite hobe,,, cookie or localStorage theke

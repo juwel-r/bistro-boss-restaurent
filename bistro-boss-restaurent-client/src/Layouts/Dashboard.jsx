@@ -14,7 +14,7 @@ import { FaCalendar, FaListUl } from "react-icons/fa6";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMailOpenSharp, IoMailSharp } from "react-icons/io5";
 import { MdHome } from "react-icons/md";
-import { NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import useIsAdmin from "../Hooks/useIsAdmin";
 
 const Dashboard = () => {
@@ -24,8 +24,8 @@ const Dashboard = () => {
   return (
     <div className="flex">
       <div className="w-72 bg-yellow-600 min-h-screen px-8 pt-8  fixed">
-        <h1 className="text-2xl font-bold">BISTRO BOSS</h1>
-        <p className="mb-8">RESTAURENT</p>
+        <Link to="/"><h1 className="text-2xl font-bold">BISTRO BOSS</h1>
+        <p className="mb-8">RESTAURENT</p></Link>
         <div className="space-y-2">
           {isAdmin ? (
             <>

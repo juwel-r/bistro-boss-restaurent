@@ -42,7 +42,7 @@ const Login = () => {
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
-    console.log({ email, password });
+    // console.log({ email, password });
     login(email, password)
       .then((result) => {
         navigate(redirect);
@@ -145,7 +145,7 @@ const Login = () => {
             </div>
           </form>
           <p className="px-6 pb-8">
-            Don't have an Account! <Link to="/register">Register</Link> now.
+            Don't have an Account! <Link to="/register" className="text-blue-600">Register</Link> now.
           </p>
           <div className="divider">Or</div>
           <GoogleLogin></GoogleLogin>

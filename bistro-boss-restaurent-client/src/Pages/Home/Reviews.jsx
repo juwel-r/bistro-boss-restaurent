@@ -10,13 +10,13 @@ import SectionHeader from "../../components/SectionHeader";
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 import { FaQuoteLeft } from "react-icons/fa";
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
 
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
+  const axiosPublic = useAxiosPublic();
   useEffect(() => {
-    fetch("http://localhost:5000/reviews")
-      .then((res) => res.json())
-      .then((data) => setReviews(data));
+    axiosPublic.get("/reviews").then((res) => setReviews(res.data));
   }, []);
   return (
     <div>

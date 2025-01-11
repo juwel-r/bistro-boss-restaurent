@@ -4,11 +4,10 @@ import useIsAdmin from "../Hooks/useIsAdmin";
 import { HashLoader } from "react-spinners";
 import { Navigate } from "react-router-dom";
 
-const AdminRoute = ({children}) => {
+const AdminRoute = ({ children }) => {
   const { userInfo, loading } = useAuth();
   const [isAdmin, isPending] = useIsAdmin();
-console.log(isAdmin)
-  if (loading || isPending )
+  if (loading || isPending)
     return (
       <div className="flex justify-center mt-8">
         <HashLoader
@@ -19,13 +18,13 @@ console.log(isAdmin)
         />
       </div>
     );
-//   if (isAdmin) {
-//     return Swal.fire({
-//       title: "Access Forbidden!",
-//       text: "Haven't permission to visit this page!",
-//       icon: "error",
-//     });
-//   }
+  //   if (isAdmin) {
+  //     return Swal.fire({
+  //       title: "Access Forbidden!",
+  //       text: "Haven't permission to visit this page!",
+  //       icon: "error",
+  //     });
+  //   }
   if (userInfo && isAdmin) {
     return children;
   }

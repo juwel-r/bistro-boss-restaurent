@@ -12,7 +12,7 @@ const image_hosting_api = `https://api.imgbb.com/1/upload?expiration=600&key=${i
 
 const EditItem = () => {
   const item = useLoaderData();
-  const { _id, name, category, price, recipe } = item || {};
+  const { _id, name, category, price, recipe } = item ;
   const axiosPublic = useAxiosPublic();
   const axiosSecure = useAxiosSecure();
   const { register, handleSubmit } = useForm();
@@ -46,14 +46,14 @@ const EditItem = () => {
         });
       }
     }
-    console.log(res.data.data.display_url);
-    console.log(data);
+    // console.log(res.data.data.display_url);
+    // console.log(data);
   };
 
   return (
     <div className="">
       <SectionHeader
-        heading={"Add item"}
+        heading={"Update item"}
         subHeading={"What's new?"}
       ></SectionHeader>
       <div className="bg-white w-10/12 mx-auto p-8">
@@ -111,7 +111,7 @@ const EditItem = () => {
           {/* submit */}
           <div className="form-control">
             <button className="btn w-36 btn-neutral rounded-none">
-              Add Item <FaUtensils></FaUtensils>
+              Update Item <FaUtensils></FaUtensils>
             </button>
           </div>
         </form>

@@ -36,7 +36,7 @@ const AllUsers = () => {
         axiosSecure
           .patch(`/user/${user._id}`)
           .then((res) => {
-            console.log(res.data);
+            // console.log(res.data);
             if (res.data.modifiedCount > 0) {
               refetch();
               Swal.fire({
@@ -46,12 +46,12 @@ const AllUsers = () => {
             }
           })
           .catch((err) => {
-            // console.log(err);
+            console.log(err);
             Swal.fire({
-              title: `${err.response.data.message+" "+ err.response.status}`,
+              title: `${err.response.data.message + " " + err.response.status}`,
               text: `${err}`,
               icon: "error",
-              width:"400px"
+              width: "400px",
             });
           });
       }
@@ -68,10 +68,11 @@ const AllUsers = () => {
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
       width: "400px",
-    })
-      .then((result) => {
-        if (result.isConfirmed) {
-          axiosSecure.delete(`/user/${user._id}`).then((res) => {
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure
+          .delete(`/user/${user._id}`)
+          .then((res) => {
             if (res.data.deletedCount > 0) {
               refetch();
               Swal.fire({
@@ -80,17 +81,17 @@ const AllUsers = () => {
                 icon: "success",
               });
             }
-          })      .catch((err) => {
+          })
+          .catch((err) => {
             console.log(err);
             Swal.fire({
-              title: `${err.response.data.message+" "+ err.response.status}`,
+              title: `${err.response.data.message + " " + err.response.status}`,
               text: `${err}`,
               icon: "error",
             });
           });
-        }
-      })
-
+      }
+    });
   };
 
   return (

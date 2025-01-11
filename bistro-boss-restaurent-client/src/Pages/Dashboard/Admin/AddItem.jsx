@@ -42,8 +42,8 @@ const AddItem = () => {
         });
       }
     }
-    console.log(res.data.data.display_url);
-    console.log(data);
+    // console.log(res.data.data.display_url);
+    // console.log(data);
   };
 
   return (

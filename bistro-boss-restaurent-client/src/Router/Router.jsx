@@ -18,11 +18,13 @@ import Payment from "../Pages/Dashboard/User/Payment";
 import PaymentHistory from "../Pages/Dashboard/User/PaymentHistory";
 import UserHome from "../Pages/Dashboard/User/UserHome";
 import AdminHome from "../Pages/Dashboard/Admin/AdminHome";
+import ErrorPage from "../Pages/ErrorPage";
 
 const router = createBrowserRouter([
   {
     element: <Main></Main>,
     path: "/",
+    errorElement:<ErrorPage></ErrorPage>,
     children: [
       {
         element: <Home></Home>,
@@ -87,7 +89,7 @@ const router = createBrowserRouter([
         path: "admin-home",
         element: (
           <AdminRoute>
-           <AdminHome></AdminHome>
+            <AdminHome></AdminHome>
           </AdminRoute>
         ),
       },
@@ -115,7 +117,9 @@ const router = createBrowserRouter([
           </AdminRoute>
         ),
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/menu/${params.id}`),
+          fetch(
+            `https://bistro-boss-restaurent-server-six.vercel.app/menu/${params.id}`
+          ),
       },
     ],
   },

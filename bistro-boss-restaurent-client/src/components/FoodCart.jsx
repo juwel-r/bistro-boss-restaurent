@@ -60,7 +60,7 @@ const FoodCart = ({ item }) => {
         }
       });
     }
-    console.log(product);
+    // console.log(product);
   };
   return (
     <div className="max-w-sm mx-auto bg-white rounded-lg shadow-lg overflow-hidden">

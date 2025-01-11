@@ -24,7 +24,7 @@ const PaymentHistory = () => {
           Total Payment: {paymentHistory.length}
         </p>
         <p  className="text-xl font-bold">
-          Total Paid Amount: ${paymentHistory.reduce((a, c) => a + c.amount, 0)}
+          Total Paid Amount: ${paymentHistory.reduce((a, c) => a + c.amount, 0).toFixed(2)}
         </p></div>
         {paymentHistory.length > 0 ? (
           <>

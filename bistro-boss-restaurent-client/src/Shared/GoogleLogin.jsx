@@ -17,7 +17,6 @@ const GoogleLogin = () => {
         name: result.user.displayName,
         email: result.user.email,
       };
-      console.log("email", user.email);
       axiosPublic.post(`/user?email=${user.email}`, user).then((result) => {
         navigate(redirect);
       });

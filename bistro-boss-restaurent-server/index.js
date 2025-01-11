@@ -25,6 +25,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
+    //collections
     const menu = client.db("bistro-boss").collection("menu");
     const reviews = client.db("bistro-boss").collection("reviews");
     const carts = client.db("bistro-boss").collection("carts");
@@ -34,7 +35,6 @@ async function run() {
     //jwt token verify
     const verifyToken = (req, res, next) => {
       const token = req.headers.authorization.split(" ")[1]; //to split Bearer from token which was sent from frontend
-      console.log("token=>", token);
       if (!token) return res.status(401).send({ message: "Access Forbidden" });
       jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decode) => {
         if (err) return res.status(401).send({ message: "Access Forbidden" });
@@ -76,7 +76,7 @@ async function run() {
       const query = { _id: id }; //no ObjectId on mongodb DB
       const result = await menu.findOne(query);
       res.send(result);
-      console.log(id);
+      // console.log(id);
     });
 
     app.post("/menu", verifyToken, verifyAdmin, async (req, res) => {
@@ -197,6 +197,73 @@ async function run() {
         return res.status(401).send({ message: "Forbidden Access" });
       const query = { email: email };
       const result = await payment.find(query).toArray();
+      res.send(result);
+    });
+
+    //============admin stats==========>>
+    app.get("/admin-stats", verifyToken, verifyAdmin, async (req, res) => {
+      const totalUsers = await users.estimatedDocumentCount();
+      const totalReviews = await reviews.estimatedDocumentCount();
+      const totalMenu = await menu.estimatedDocumentCount();
+      const totalOrders = await payment.estimatedDocumentCount();
+      const result = await payment
+        .aggregate([
+          {
+            $group: {
+              _id: null,
+              revenue: {
+                $sum: "$amount",
+              },
+            },
+          },
+        ])
+        .toArray();
+      const totalRevenue = result.length > 0 ? result[0].revenue : 0;
+      res.send({
+        totalRevenue,
+        totalUsers,
+        totalReviews,
+        totalMenu,
+        totalOrders,
+      });
+    });
+
+    //use of aggregate pipeline
+    app.get("/order-stats",verifyToken, verifyAdmin, async (req, res) => {
+      const result = await payment
+        .aggregate([
+          {
+            $unwind: "$productIds", //payment collection ar productIds field a all product ar _id as array te ase seita ber korar jonno "$unwind"
+          },
+          {
+            $lookup: { //this part is slightly same as vlookup formula of excel
+              from: "menu", //jei collection ar sathe match korate cai seitar name
+              localField: "productIds", //jei field match koraite cai
+              foreignField: "_id", //jai menu collection ar jei field ar sathe match kore find korte cai setail... 
+              as: "menuItems", //now menuItem is a new array of object
+            },
+          },
+          {
+            $unwind: "$menuItems", //make that array to object
+          },
+          {
+            $group: { 
+              _id: "$menuItems.category", //by default category will show object name as _id
+              quantity:{$sum:1 },
+              revenue:{$sum:"$menuItems.price" }
+              //eikhane aro jei jei field nite cai seigula add kora jabe..$menuItems object ar theke destructure kore nite hobe
+            },
+          },
+          {
+            $project:{ //to rename or filter---
+              _id:0, //to remove any keys 
+              category:"$_id", //_id will show as category
+              quantity: "$quantity",
+              revenue:"$revenue"
+            }
+          }
+        ])
+        .toArray();
       res.send(result);
     });
 

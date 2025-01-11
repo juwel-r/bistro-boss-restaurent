@@ -25,7 +25,7 @@ const Register = () => {
     // console.log(data);
     createUser(data.email, data.password)
       .then((result) => {
-        console.log(result.user);
+        // console.log(result.user);
         updateUserProfile({ displayName: data.name, photoURL: data.photoURL })
           .then(() => {
             axiosPublic
@@ -199,7 +199,7 @@ const Register = () => {
           </div>
         </form>
         <p className="px-6 pb-8">
-          Already have an Account! <Link to="/login">Login Here</Link>
+          Already have an Account! <Link to="/login" className="text-blue-600">Login Here</Link>
         </p>
       </div>
     </>
